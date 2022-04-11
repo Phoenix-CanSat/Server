@@ -1,0 +1,78 @@
+﻿@page "/fetchdata"
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Charts
+@using PhoenixServer.Core.Entities;
+@inject HttpClient Http
+
+<PageTitle>Live data feed</PageTitle>
+
+<h1>Live data feed</h1>
+<SfChart Title="Temperature-Time">
+    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"></ChartPrimaryXAxis>
+    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+    <ChartSeriesCollection>
+        <ChartSeries DataSource="@Temperatures" XName="ID" YName="Value" Type="ChartSeriesType.Area">
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>
+<SfChart Title="Pressure-Time">
+    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"></ChartPrimaryXAxis>
+    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+    <ChartSeriesCollection>
+        <ChartSeries DataSource="@Pressures" XName="ID" YName="Value" Type="ChartSeriesType.Area">
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>
+<SfChart Title="Altitude-Time">
+    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"></ChartPrimaryXAxis>
+    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+    <ChartSeriesCollection>
+        <ChartSeries DataSource="@Altitudes" XName="ID" YName="Value" Type="ChartSeriesType.Area">
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>
+<SfChart Title="Humidity-Time">
+    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"></ChartPrimaryXAxis>
+    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+    <ChartSeriesCollection>
+        <ChartSeries DataSource="@Humidities" XName="ID" YName="Value" Type="ChartSeriesType.Area">
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>
+<SfChart Title="GroundTemperature-Time">
+    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"></ChartPrimaryXAxis>
+    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+    <ChartSeriesCollection>
+        <ChartSeries DataSource="@GroundTemperatures" XName="ID" YName="Value" Type="ChartSeriesType.Area">
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>
+<SfChart Title="GroundPressure-Time">
+    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category"></ChartPrimaryXAxis>
+    <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+    <ChartSeriesCollection>
+        <ChartSeries DataSource="@GroundPressures" XName="ID" YName="Value" Type="ChartSeriesType.Area">
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>
+
+@code {
+    private Temperature[]? Temperatures;
+    private Pressure[]? Pressures;
+    private PhoenixServer.Core.Entities.Position[]? Positions;
+    private Altitude[]? Altitudes;
+    private Humidity[]? Humidities;
+    private GroundPressure[]? GroundPressures;
+    private GroundTemperature[]? GroundTemperatures;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Temperatures = await Http.GetFromJsonAsync<Temperature[]>("localhost:7260/api/temperature");
+        Pressures = await Http.GetFromJsonAsync<Pressure[]>("localhost:7260/api/pressure");
+        Positions = await Http.GetFromJsonAsync<PhoenixServer.Core.Entities.Position[]>("localhost:7260/api/position");
+        Altitudes = await Http.GetFromJsonAsync<Altitude[]>("localhost:7260/api/altitude");
+        Humidities = await Http.GetFromJsonAsync<Humidity[]>("localhost:7260/api/humidity");
+        GroundPressures = await Http.GetFromJsonAsync<GroundPressure[]>("localhost:7260/api/ground_temperature");
+        GroundTemperatures = await Http.GetFromJsonAsync<GroundTemperature[]>("localhost:7260/api/ground_pressure");
+    }
+}
